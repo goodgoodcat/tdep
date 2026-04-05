@@ -201,9 +201,6 @@ dumpconf: block
         case (2) ! abinit output
             fname = 'abinput_conf'//tochar(iconf, 4)
             call p%writetofile(trim(fname), opts%output_format, write_velocities=.true.)
-        case (3) ! LAMMPS output
-            fname = 'lammps_conf'//tochar(iconf, 4)
-            call p%writetofile(trim(fname), opts%output_format, write_velocities=.true.)
         case (4) ! AIMS output
             fname = 'aims_conf'//tochar(iconf, 4)
             call p%writetofile(trim(fname), opts%output_format, write_velocities=.true.)

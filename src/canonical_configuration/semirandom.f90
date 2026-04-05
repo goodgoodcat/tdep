@@ -367,9 +367,6 @@ subroutine generate_semirandom_configurations(uc, ss, fc, fcss, temperature, qua
                     case (2) ! abinit output
                         fname = 'abinput_conf'//tochar(j, 4)
                         call p%writetofile(trim(fname), output_format, write_velocities=.true.)
-                    case (3) ! LAMMPS output
-                        fname = 'lammps_conf'//tochar(j, 4)
-                        call p%writetofile(trim(fname), output_format, write_velocities=.true.)
                     case (4) ! AIMS output
                         fname = 'aims_conf'//tochar(j, 4)
                         call p%writetofile(trim(fname), output_format, write_velocities=.true.)
