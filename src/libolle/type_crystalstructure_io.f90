@@ -472,12 +472,6 @@ module subroutine writetofile(p,filename,output_format,write_velocities,transfor
             call writetofile_vasp(p,filename,write_velocities)
         case(2) ! Abinit
             call writetofile_abinit(p,filename,write_velocities)
-        case(3) ! LAMMPS
-            if(present(transformationmatrix)) then
-              call writetofile_lammps(p,filename,write_velocities,transformationmatrix)
-            else
-              call writetofile_lammps(p,filename,write_velocities)
-            end if
         case(4) ! FHI Aims
             call writetofile_aims(p,filename,write_velocities)
         case(5) ! Siesta
@@ -607,91 +601,6 @@ module subroutine writetofile(p,filename,output_format,write_velocities,transfor
         endif
 
         if ( filename .ne. 'stdout' ) close(u)
-    end subroutine
-
-    subroutine writetofile_lammps(p,filename,write_velocities,transformationmatrix)
-        !> crystal structure
-        class(lo_crystalstructure), intent(in) :: p
-        !> filename
-        character(len=*), intent(in) :: filename
-        !> should be written. Default false.
-        logical, intent(in), optional :: write_velocities
-        !> optionally, return the magical transformation matrix
-        real(flyt), dimension(3,3), intent(out), optional :: transformationmatrix
-        !
-        real(flyt), dimension(3,3) :: tm,basis
-        real(flyt) :: a,b,c,al,be,gm
-        real(flyt) :: ax,bx,cx,by,cy,cz
-        logical :: writevel
-        integer :: i,u,it
-
-        call lo_stop_gracefully(['Native LAMMPS IO was removed, please use external converters.'], 8)
-
-        ! if ( present(write_velocities) ) then
-        !     writevel=write_velocities
-        ! else
-        !     writevel=.false.
-        ! endif
-
-        ! ! Get the lattice parameter thingy
-        ! call lo_get_axis_angles(p%latticevectors,a,b,c,al,be,gm)
-
-        ! ax=a
-        ! bx=lo_chop(b*cos(gm),lo_sqtol)
-        ! by=sqrt(b**2-bx**2)
-        ! cx=lo_chop( c*cos(be) ,lo_sqtol)
-        ! cy=lo_chop( ( dot_product(p%latticevectors(2,:),p%latticevectors(3,:))-bx*cx )/by ,lo_sqtol)
-        ! cz=lo_chop( sqrt(c**2-cx**2-cy**2) , lo_sqtol )
-
-        ! ! Convert to Angstrom
-        ! ax=ax*lo_bohr_to_A
-        ! bx=bx*lo_bohr_to_A
-        ! by=by*lo_bohr_to_A
-        ! cx=cx*lo_bohr_to_A
-        ! cy=cy*lo_bohr_to_A
-        ! cz=cz*lo_bohr_to_A
-
-        ! basis=0.0_flyt
-        ! basis(:,1)=[ ax , 0.0_flyt, 0.0_flyt]
-        ! basis(:,2)=[ bx, by, 0.0_flyt]
-        ! basis(:,3)=[ cx, cy, cz ]
-        ! basis=lo_chop(basis,lo_sqtol)
-
-        ! ! Return the coordinate transformation to what LAMMPS likes.
-        ! if ( present(transformationmatrix) ) then
-        !     transformationmatrix=matmul(basis,p%inv_latticevectors)
-        ! endif
-
-        ! ! figure out how to convert stuff
-        ! tm=matmul(basis,p%inv_latticevectors)
-
-        ! ! and print it
-        ! u=open_file('out',trim(filename))
-        !     write(u,*) '# Something'
-        !     write(u,*) tochar(p%na),' atoms'
-        !     write(u,*) tochar(maxval(p%species)),' atom types'
-        !     write(u,*) '0',ax,'xlo xhi '
-        !     write(u,*) '0',by,'ylo yhi '
-        !     write(u,*) '0',cz,'zlo zhi '
-        !     write(u,'(a,3f20.8,a)') '#', bx,cx,cy,'xy xz yz'
-        !     write(u,*) 'Masses'
-        !     do it=1,p%nelements
-        !       i = 1
-        !       do i=1,p%na
-        !          if (p%species(i) /= it) exit
-        !       end do
-        !       write(u,'(i10,e20.8,2a)') it, lo_chop(p%mass(i),lo_sqtol), ' # ', trim(p%atomic_symbol(it))
-        !     end do
-        !     write(u,*) 'Atoms'
-        !     write(u,*) ''
-        !     do i=1,p%na
-        !         write(u,'(2i10,3e20.8)') i,p%species(i),lo_chop(matmul(basis,p%r(:,i)),lo_sqtol)
-        !     enddo
-        ! close(u)
-
-        ! if ( writevel ) then
-        !     write(*,*) 'Have not fixed velocity output for LAMMMPS yet'
-        ! endif
     end subroutine
 
     !> Writes a structure to abinit output file or stdout

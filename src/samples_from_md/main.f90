@@ -157,8 +157,6 @@ do i = 1, opts%n
         call p%writetofile(fname, opts%output_format, .true.)
     case (2) ! Abinit
         call p%writetofile(fname, opts%output_format, .true.)
-    case (3) ! LAMMPS
-        call lo_stop_gracefully(['Native LAMMPS IO was removed, please use external converters.'], 8)
     case (4) ! AIMS
         call p%writetofile(fname, opts%output_format, .true.)
     case default

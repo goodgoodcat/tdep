@@ -83,8 +83,6 @@ getsupercell: block
         case (2) ! Abinit
             call ss%writetofile('outfile.supercell_abinit', opts%outputformat)
             write (*, *) '... wrote supercell in Abinit format'
-        case (3) ! LAMMPS
-            call lo_stop_gracefully(['Native LAMMPS IO was removed, please use external converters.'], 8)
         case (4) ! FHI-Aims
             call ss%writetofile('outfile.supercell_aims', opts%outputformat, transformationmatrix=tm)
             write (*, *) '... wrote supercell in FHI-Aims format'
@@ -109,10 +107,6 @@ getsupercell: block
             ! and print the normal output stuff
             call uc%writetofile('outfile.uc_ipi', 1)
             call ss%writetofile('outfile.ss_ipi', 1)
-            ! and the lammps file
-            ss%latticevectors = ss%latticevectors
-            ss%inv_latticevectors = ss%inv_latticevectors
-            call ss%writetofile('outfile.supercell_lammps_ipi', 3, transformationmatrix=tm)
         case (6) ! QE
             call ss%writetofile('outfile.supercell_qe', opts%outputformat)
             write (*, *) '... wrote supercell in Quantum ESPRESSO format'
